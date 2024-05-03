@@ -1,21 +1,24 @@
 import { useCallback, useState } from "react";
 
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { CiCirclePlus } from "react-icons/ci";
 import DescriptionBox from "./descriptionBox";
 import ImagePreview from "./imagePreview";
 import { LiaTimesSolid } from "react-icons/lia";
+import SubmitButton from "../../components/submitButton";
 import axios from "axios";
 import { baseurl } from "../../utils/exports";
 import { getItemWithKey } from "../../utils/storedItems";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const PostBlog = () => {
+  const { updateBlog } = useSelector((state) => state.others);
+
   const [initialState, setInitialState] = useState({
-    heading: "",
-    description: "",
-    tags: [],
-    thumbnail: null,
+    heading: updateBlog?.heading || "",
+    description: updateBlog?.description || "",
+    tags: updateBlog?.tags || [],
+    thumbnail: updateBlog?.thumbnail || null,
     previewImages: [],
     tagInput: "",
   });
@@ -38,7 +41,7 @@ const PostBlog = () => {
   const filterTags = useCallback(
     (tagName) => {
       const filteredTags = initialState?.tags?.filter(
-        (item) => item.name !== tagName
+        (item) => item !== tagName
       );
       setInitialState((prevState) => ({
         ...prevState,
@@ -57,7 +60,7 @@ const PostBlog = () => {
     formData.append("description", initialState?.description);
     if (initialState?.tags?.length > 0) {
       initialState?.tags?.forEach((tag) => {
-        formData.append("tags", tag.name);
+        formData.append("tags", tag);
       });
     }
     setLoading(true);
@@ -68,10 +71,44 @@ const PostBlog = () => {
           authorization: token,
         },
       });
-      setInitialState(null);
+      setTimeout(() => {
+        location.reload();
+      }, 600);
       return toast.success(res?.data?.message);
     } catch (error) {
-      console.log(error);
+      return toast.error(
+        error?.response?.data?.message || "Error uploading image."
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("image", initialState?.thumbnail);
+    formData.append("heading", initialState?.heading);
+    formData.append("description", initialState?.description);
+    if (initialState?.tags?.length > 0) {
+      initialState?.tags?.forEach((tag) => {
+        formData.append("tags", tag);
+      });
+    }
+    setLoading(true);
+    try {
+      const res = await axios.put(`${baseurl}/blogs`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: token,
+          id: updateBlog?._id,
+        },
+      });
+      setTimeout(() => {
+        location.reload();
+      }, 600);
+      return toast.success(res?.data?.message);
+    } catch (error) {
       return toast.error(
         error?.response?.data?.message || "Error uploading image."
       );
@@ -86,18 +123,26 @@ const PostBlog = () => {
         <form
           encType="multipart/form-data"
           className="pb-5"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            if (updateBlog) {
+              handleUpdate(e);
+            } else {
+              handleSubmit(e);
+            }
+          }}
         >
+          {/* thumbnail */}
           <div className="sm:min-h-[500px] overflow-hidden mb-4">
             {initialState?.thumbnail ? (
               <ImagePreview
                 imageUrl={
-                  initialState?.thumbnail &&
-                  URL.createObjectURL(initialState?.thumbnail)
+                  !initialState?.thumbnail?.name && updateBlog
+                    ? initialState?.thumbnail
+                    : URL.createObjectURL(initialState?.thumbnail)
                 }
-                handleEvent={() =>
-                  setInitialState({ ...initialState, thumbnail: null })
-                }
+                handleEvent={() => {
+                  setInitialState({ ...initialState, thumbnail: null });
+                }}
               />
             ) : (
               <>
@@ -127,39 +172,6 @@ const PostBlog = () => {
             )}
           </div>
 
-          {initialState?.thumbnail && (
-            <div className="w-full h-full grid grid-cols-4 gap-4 mb-4">
-              {initialState?.previewImages?.map((imageUrl, index) => (
-                <ImagePreview
-                  key={index}
-                  imageUrl={imageUrl}
-                  // handleEvent={() => handleClick(index)}
-                />
-              ))}
-              {/* {previewImages.length < 4 && (
-                <>
-                  <input
-                    type="file"
-                    name="images"
-                    multiple
-                    alt=""
-                    id="images"
-                    onChange={handleImageUpload}
-                    accept="image/"
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor="images"
-                    className="w-full min-h-[170px] rounded-sm bg-gray-100 flex flex-col gap-y-1 items-center justify-center cursor-pointer"
-                  >
-                    <CiCirclePlus className="text-4xl" />
-                    Click here to select an image
-                  </label>
-                </>
-              )} */}
-            </div>
-          )}
-
           <div className="relative">
             <h1 className="font-medium mt-3 mb-1.5">Heading*</h1>
             <textarea
@@ -188,18 +200,20 @@ const PostBlog = () => {
           <div className="w-full border rounded-sm flex flex-col p-2  gap-y-2">
             {initialState?.tags?.length > 0 && (
               <ul className="flex items-center flex-wrap gap-2">
-                {initialState?.tags?.map((item, index) => (
-                  <li
-                    key={index}
-                    className="pl-5 pr-2 py-1.5 rounded-3xl bg-gray-100 flex items-center gap-2"
-                  >
-                    {item?.name}
-                    <LiaTimesSolid
-                      onClick={() => filterTags(item?.name)}
-                      className="cursor-pointer"
-                    />
-                  </li>
-                ))}
+                {initialState?.tags?.map((item, index) => {
+                  return (
+                    <li
+                      key={index}
+                      className="pl-5 pr-2 py-1.5 rounded-3xl bg-gray-100 flex items-center gap-2"
+                    >
+                      {item}
+                      <LiaTimesSolid
+                        onClick={() => filterTags(item)}
+                        className="cursor-pointer"
+                      />
+                    </li>
+                  );
+                })}
               </ul>
             )}
             <textarea
@@ -212,10 +226,7 @@ const PostBlog = () => {
                 if (e.key === "Enter" && initialState?.tagInput) {
                   setInitialState({
                     ...initialState,
-                    tags: [
-                      ...initialState.tags,
-                      { name: initialState?.tagInput },
-                    ],
+                    tags: [...initialState.tags, initialState?.tagInput],
                     tagInput: "",
                   });
                 }
@@ -225,23 +236,11 @@ const PostBlog = () => {
             ></textarea>
           </div>
 
-          {loading ? (
-            <div
-              className={`w-full
-              outline-none bg-black/80 cursor-progress flex items-center gap-2 justify-center mt-5 text-white text-md font-medium tracking-wide py-2 rounded-sm`}
-            >
-              <AiOutlineLoading3Quarters className="animate-spin duration-300 transition-all" />{" "}
-              Please wait...
-            </div>
-          ) : (
-            <button
-              type="submit"
-              className={`w-full
-              outline-none bg-black/80 hover:bg-black transition-colors duration-300 mt-5 text-white text-md font-medium tracking-wide py-2 rounded-sm`}
-            >
-              Upload blog
-            </button>
-          )}
+          <SubmitButton
+            loading={loading}
+            text={"Upload blog"}
+            color={"black"}
+          />
         </form>
       </div>
     </>
@@ -249,3 +248,35 @@ const PostBlog = () => {
 };
 
 export default PostBlog;
+// {(initialState?.thumbnail || updateBlog) && (
+//   <div className="w-full h-full grid grid-cols-4 gap-4 mb-4">
+//     {initialState?.previewImages?.map((imageUrl, index) => (
+//       <ImagePreview
+//         key={index}
+//         imageUrl={imageUrl}
+//         // handleEvent={() => handleClick(index)}
+//       />
+//     ))}
+//     {/* {previewImages.length < 4 && (
+//       <>
+//         <input
+//           type="file"
+//           name="images"
+//           multiple
+//           alt=""
+//           id="images"
+//           onChange={handleImageUpload}
+//           accept="image/"
+//           className="hidden"
+//         />
+//         <label
+//           htmlFor="images"
+//           className="w-full min-h-[170px] rounded-sm bg-gray-100 flex flex-col gap-y-1 items-center justify-center cursor-pointer"
+//         >
+//           <CiCirclePlus className="text-4xl" />
+//           Click here to select an image
+//         </label>
+//       </>
+//     )} */}
+//   </div>
+// )}

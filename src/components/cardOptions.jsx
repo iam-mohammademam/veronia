@@ -2,9 +2,15 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { GoTrash } from "react-icons/go";
 import { LuPencilLine } from "react-icons/lu";
-import toast from "react-hot-toast";
+import { indexPath } from "../App";
+import { setUpdateBlog } from "../app/features/othersSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-const CardOptions = ({ setShowModal }) => {
+const CardOptions = ({ setShowModal, item }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="absolute top-2 right-2">
@@ -16,7 +22,8 @@ const CardOptions = ({ setShowModal }) => {
           >
             <li
               onClick={() => {
-                return toast.loading("This function is under development.");
+                dispatch(setUpdateBlog(item));
+                navigate(`/${indexPath}/post`);
               }}
               className="font-medium capitalize flex items-center gap-1.5 hover:bg-slate-100 duration-300 transition-all cursor-pointer px-3 py-1.5"
             >

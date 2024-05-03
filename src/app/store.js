@@ -5,13 +5,11 @@ import {
 } from "./features/mainSlice";
 
 import blogSlice from "./features/blogSlice";
-import chatSlice from "./features/chatSlice";
 import commentSlice from "./features/commentSlice";
 import { configureStore } from "@reduxjs/toolkit";
-import messageSlice from "./features/messageSlice";
 import myBlogsSlice from "./features/myBlogsSlice";
+import othersSlice from "./features/othersSlice";
 import singleBlogSlice from "./features/singleBlogSlice";
-import socketSlice from "./features/socketSlice";
 
 export const store = configureStore({
   reducer: {
@@ -22,8 +20,6 @@ export const store = configureStore({
     filterBlogs: filterBlogSlice,
     myBlogs: myBlogsSlice,
     trendingBlogs: trendingBlogSlice,
-    socket: socketSlice,
-    chats: chatSlice,
-    messages: messageSlice,
+    others: othersSlice,
   },
 });

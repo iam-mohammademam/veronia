@@ -79,7 +79,7 @@ const Card = ({ column, item, options }) => {
           />
         </div>
         {/* 3 dots */}
-        {options && <CardOptions setShowModal={setShowModal} />}
+        {options && <CardOptions setShowModal={setShowModal} item={item} />}
       </div>
 
       {/* popup modal */}
