@@ -13,25 +13,15 @@ export const handleLike = async (blogId) => {
     return toast.error("You have to login first!");
   }
   try {
-    await putRequest(`/like/${blogId}`);
+    const res = await putRequest(`/like/${blogId}`);
+    console.log(res);
     return { success: true };
   } catch (error) {
     console.error(error);
     return error?.response?.data?.message;
   }
 };
-export const handleDislike = async (blogId) => {
-  if (!token || !blogId) {
-    return toast.error("You have to login first!");
-  }
-  try {
-    await putRequest(`/dislike/${blogId}`);
-    return { success: true };
-  } catch (error) {
-    console.error(error);
-    return error?.response?.data?.message;
-  }
-};
+
 export const handlePostComment = async (blogId, value) => {
   try {
     await axios.post(

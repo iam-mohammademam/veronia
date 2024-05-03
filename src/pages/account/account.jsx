@@ -1,28 +1,17 @@
 /* eslint-disable react/prop-types */
 
-import Profile from "./profile";
-import Posts from "./blogs";
 import Navigation from "./navigation";
-import { indexPath } from "../../App";
-import { useNavigate } from "react-router-dom";
+import Posts from "./blogs";
+import Profile from "./profile";
+import { useSelector } from "react-redux";
 
-const Account = ({ activeMenu, setActiveMenu }) => {
-  const navigate = useNavigate();
+const Account = () => {
+  const { activeMenu } = useSelector((state) => state.others);
 
-  const handleClick = (item) => {
-    if (item === "write") {
-      navigate(`/${indexPath}/post`);
-    }
-    if (item === "settings") {
-      return;
-    } else {
-      setActiveMenu(item);
-    }
-  };
   return (
     <div className="w-screen flex min-h-screen md:px-[10%] px-[5%] p-5 gap-5 flex-nowrap relative">
       <div className="lg:w-1/5 md:w-1/4 sm:w-1/3 max-[500px]:hidden shrink-0  border-r border-black/10">
-        <Navigation setActiveMenu={setActiveMenu} handleClick={handleClick} />
+        <Navigation />
       </div>
       <div className="w-full">
         {activeMenu === "profile" ? (

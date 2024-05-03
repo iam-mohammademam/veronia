@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import "./App.css";
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -16,31 +17,32 @@ import SignUP from "./pages/account/signUP";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { Toaster } from "react-hot-toast";
 import VerifyEmail from "./pages/account/verifyEmail";
+import { addLoggedInUser } from "./app/features/othersSlice";
 import { getItemWithKey } from "./utils/storedItems";
-import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 
 export const indexPath = "veronia";
 const App = () => {
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [activeMenu, setActiveMenu] = useState("profile");
+  const dispatch = useDispatch();
 
   const user = getItemWithKey("user");
+  useEffect(() => {
+    if (user) {
+      dispatch(addLoggedInUser(user));
+    }
+  }, [user]);
+
   return (
     <SkeletonTheme baseColor="#302f2f" highlightColor="#444">
       <BrowserRouter>
-        <Header
-          showMobileMenu={showMobileMenu}
-          setShowMobileMenu={setShowMobileMenu}
-          setActiveMenu={setActiveMenu}
-        />
+        <Header />
 
         <Routes>
           <Route path={`/${indexPath}/search/:query`} element={<Search />} />
           <Route path={`/${indexPath}/verify/:id`} element={<VerifyEmail />} />
           <Route path={`/${indexPath}/detail/:id`} element={<Details />} />
           <Route path={`/${indexPath}/filter/:tagName`} element={<Filter />} />
-          {/* <Route path={`/${indexPath}/chat/:params`} element={<Chat />} />
-          <Route path={`/${indexPath}/chat`} element={<Chat />} /> */}
           <Route exact path={`/${indexPath}`} element={<Home />} />
           <Route
             path={`/${indexPath}/post`}
@@ -48,16 +50,7 @@ const App = () => {
           />
           <Route path={`/${indexPath}/sign-in`} element={<SignIn />} />
           <Route path={`/${indexPath}/sign-up`} element={<SignUP />} />
-          <Route
-            path={`/${indexPath}/profile`}
-            element={
-              <Account
-                showMobileMenu={showMobileMenu}
-                activeMenu={activeMenu}
-                setActiveMenu={setActiveMenu}
-              />
-            }
-          />
+          <Route path={`/${indexPath}/profile`} element={<Account />} />
           <Route path={`*`} element={<NoPageFound page={true} />} />
         </Routes>
 

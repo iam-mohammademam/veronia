@@ -1,11 +1,29 @@
+import { setActiveMenu, setMobileMenu } from "../../app/features/othersSlice";
+
+import { handleLogout } from "../../utils/functions";
+import { indexPath } from "../../App";
+import { profileMenu } from "../../utils/menu";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { profileMenu } from "../../utils/menu";
-import { handleLogout } from "../../utils/functions";
 
-const Navigation = ({ mobile, handleClick }) => {
+const Navigation = ({ mobile }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [showSubmenu, setShowSubmenu] = useState(false);
 
+  const handleClick = (item) => {
+    dispatch(setActiveMenu(item));
+    if (item) {
+      dispatch(setMobileMenu(false));
+      if (item === "post") {
+        navigate(`/${indexPath}/post`);
+      } else {
+        navigate(`/${indexPath}/profile`);
+      }
+    }
+  };
   return (
     <>
       {!mobile && <h1 className="text-xl font-medium mb-5 px-2">My profile</h1>}
@@ -17,18 +35,19 @@ const Navigation = ({ mobile, handleClick }) => {
                 onClick={() => {
                   if (item.name === "settings") {
                     setShowSubmenu(!showSubmenu);
+                  } else {
+                    handleClick(item.path);
                   }
-                  handleClick(item.name);
                 }}
-                className="w-full cursor-pointer py-2.5 px-2 text-md tracking-wide hover:bg-slate-100/90 transition-all duration-300 capitalize backdrop-blur-sm rounded-sm border- border-white/10 flex items-center justify-between"
+                className="w-full cursor-pointer py-2.5 px-2 text-md tracking-wide hover:bg-slate-100/10 transition-all duration-300 capitalize backdrop-blur-sm rounded-sm border- border-white/10 flex items-center justify-between"
               >
                 <span className="flex items-center gap-1.5 text-lg">
                   {item.icon}
-                  {item?.name}
+                  {item.name}
                 </span>
 
                 <span className={`${showSubmenu ? "-rotate-180 " : ""}`}>
-                  {item?.chevron}
+                  {item.chevron}
                 </span>
               </div>
               <ul
@@ -44,7 +63,7 @@ const Navigation = ({ mobile, handleClick }) => {
                         if (item.name === "logout") {
                           handleLogout();
                         }
-                        handleClick(item.name);
+                        handleClick(item.path);
                       }}
                       className="w-full cursor-pointer py-2.5 px-2 text-lg tracking-wide hover:bg-slate-100/90 transition-all duration-300 capitalize backdrop-blur-sm rounded-sm border- border-white/10 flex items-center gap-1.5"
                     >

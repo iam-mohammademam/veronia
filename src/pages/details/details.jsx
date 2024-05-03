@@ -1,22 +1,22 @@
+import { useDispatch, useSelector } from "react-redux";
+
+import Author from "./author";
+import CardTools from "../../components/cardTools";
+import Comments from "./comments";
+import DetailsSkeleton from "../../skeleton/detailsSkeleton";
+import SearchBar from "../../components/searchBar";
+import Similar from "./similar";
+import format from "dateformat";
+import { getSingleBlog } from "../../app/features/actions";
+import { indexPath } from "../../App";
+import { useEffect } from "react";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useNavigate } from "react-router-dom";
-import Similar from "./similar";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getSingleBlog } from "../../app/features/actions";
-import format from "dateformat";
-import Comments from "./comments";
-import Author from "./author";
-import Tools from "./tools";
-import SearchBar from "../../components/searchBar";
-import DetailsSkeleton from "../../skeleton/detailsSkeleton";
-import { indexPath } from "../../App";
 
 const Details = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ const Details = () => {
                 dangerouslySetInnerHTML={{ __html: data?.description }}
               />
               {/* social tools */}
-              <Tools data={data} />
+              <CardTools item={data} singleBlog={true} />
               {/* all comments */}
               <Comments blogId={id} />
             </div>

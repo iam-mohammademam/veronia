@@ -10,25 +10,26 @@ import {
 
 const ShareIcons = ({ data }) => {
   return (
-    <ul className="flex items-center gap-3">
+    <ul className="flex items-center gap-3 relative">
+      <span className="share-icons absolute w-full h-full bg-transparent"></span>
       <FacebookShareButton
-        className="hover:scale-90 duration-300 transition-all"
+        className="hover:scale-90 duration-300 transition-all cursor-pointer"
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]}`}
+        hashtag={`#${data?.tags[0]} #veronia`}
       >
         <FacebookIcon size={25} round={true} />
       </FacebookShareButton>
       <TwitterShareButton
         className="hover:scale-90 duration-300 transition-all"
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]}`}
+        hashtag={`#${data?.tags[0]} #veronia`}
       >
         <TwitterIcon size={25} round={true} />
       </TwitterShareButton>
       <TelegramShareButton
         className="hover:scale-90 duration-300 transition-all"
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]}`}
+        hashtag={`#${data?.tags[0]} #veronia`}
       >
         <TelegramIcon size={25} round={true} />
       </TelegramShareButton>

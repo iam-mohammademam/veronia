@@ -9,13 +9,17 @@ const singleBlogSlice = createSlice({
     error: null,
   },
   reducers: {
-    addLikeInBlog: (state, action) => {
+    addLikeInSingleBlog: (state, action) => {
       const { userId } = action.payload;
       if (state.data) {
-        state.data.likes.push(userId);
-        state.data.dislikes = state.data.dislikes.filter(
-          (dislike) => dislike !== userId
-        );
+        if (state.data.likes.includes(userId)) {
+          const index = state.data.likes.indexOf(userId);
+          if (index !== -1) {
+            state.data.likes.splice(index, 1);
+          }
+        } else {
+          state.data.likes.push(userId);
+        }
       }
     },
     addDislikeInBlog: (state, action) => {
@@ -44,5 +48,5 @@ const singleBlogSlice = createSlice({
       });
   },
 });
-export const { addLikeInBlog, addDislikeInBlog } = singleBlogSlice.actions;
+export const { addLikeInSingleBlog } = singleBlogSlice.actions;
 export default singleBlogSlice.reducer;

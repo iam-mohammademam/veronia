@@ -1,35 +1,25 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/prop-types */
 
-import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import CardAuthor from "./cardAuthor";
 import CardOptions from "./cardOptions";
 import CardTools from "./cardTools";
 import { deleteBlog } from "../app/features/myBlogsSlice.js";
-import { getItemWithKey } from "../utils/storedItems";
 import { handleDeleteBlog } from "../utils/functions";
 import { indexPath } from "../App";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Card = ({ column, item, options }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [showModal, setShowModal] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
 
-  const user = getItemWithKey("user");
+  const { loggedInUser } = useSelector((state) => state.others);
 
-  useEffect(() => {
-    if (item?.likes?.includes(user?._id)) {
-      setIsLiked(true);
-    }
-    if (item?.dislikes?.includes(user?._id)) {
-      setIsDisliked(true);
-    }
-  }, [item]);
   const handleNavigation = () => {
     navigate(`/${indexPath}/detail/${item?._id}`);
   };
@@ -56,14 +46,7 @@ const Card = ({ column, item, options }) => {
             className="ellipsis-3"
             dangerouslySetInnerHTML={{ __html: item?.description }}
           />
-          <CardTools
-            item={item}
-            user={user}
-            isDisliked={isDisliked}
-            isLiked={isLiked}
-            setIsLiked={setIsLiked}
-            setIsDisliked={setIsDisliked}
-          />
+          <CardTools item={item} />
         </div>
         {/* thumbnail */}
         <div
@@ -107,7 +90,7 @@ const Card = ({ column, item, options }) => {
           </button>
           <button
             onClick={async () => {
-              if (!user?._id) {
+              if (!loggedInUser?._id) {
                 return;
               } else {
                 dispatch(deleteBlog({ id: item?._id }));

@@ -13,10 +13,14 @@ const blogSlice = createSlice({
       const { userId, blogId } = action.payload;
       if (state.data) {
         const findBlog = state.data.results.find((item) => item._id === blogId);
-        findBlog.likes.push(userId);
-        findBlog.dislikes = findBlog.dislikes.filter(
-          (dislike) => dislike !== userId
-        );
+        if (findBlog.likes.includes(userId)) {
+          const index = findBlog.likes.indexOf(userId);
+          if (index !== -1) {
+            findBlog.likes.splice(index, 1);
+          }
+        } else {
+          findBlog.likes.push(userId);
+        }
       }
     },
     addDislike: (state, action) => {
