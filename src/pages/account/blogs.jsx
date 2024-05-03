@@ -1,10 +1,11 @@
+import { useDispatch, useSelector } from "react-redux";
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getMyBlogs } from "../../app/features/actions";
-import CardSkeleton from "../../skeleton/cardSkeleton";
+
 import Card from "../../components/card";
+import CardSkeleton from "../../skeleton/cardSkeleton";
 import Pagination from "../../components/pagination";
+import { getMyBlogs } from "../../app/features/actions";
 
 const Blogs = () => {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ const Blogs = () => {
 
   return (
     <>
-      <h1 className="text-xl font-medium mb-5 text-center"> My blogs</h1>
+      <h1 className="text-xl font-medium mb-5 text-center">My blogs</h1>
       <div className="lg:w-4/5 w-full mx-auto">
         {loading ? (
           <>

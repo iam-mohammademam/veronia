@@ -24,12 +24,13 @@ export const handleLike = async (blogId) => {
 
 export const handlePostComment = async (blogId, value) => {
   try {
-    await axios.post(
+    const res = await axios.post(
       baseurl + `/comment/${blogId}`,
       { title: value },
       { headers: { authorization: token } }
     );
-    return { success: true };
+
+    return { result: res.data.result };
   } catch (error) {
     console.error(error);
     return error?.response?.data?.message;

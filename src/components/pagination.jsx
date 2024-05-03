@@ -4,7 +4,6 @@ import { GoChevronLeft, GoChevronRight } from "react-icons/go";
 import ReactPaginate from "react-paginate";
 
 const Pagination = ({ totalPages, setCurrPage }) => {
-  const pages = Math.ceil(totalPages);
   const handlePageClick = ({ selected }) => {
     setCurrPage(selected + 1);
   };
@@ -12,7 +11,7 @@ const Pagination = ({ totalPages, setCurrPage }) => {
   return (
     <ReactPaginate
       breakLabel="..."
-      pageCount={pages ? pages : 3}
+      pageCount={totalPages ? totalPages : 3}
       pageRangeDisplayed={3}
       onPageChange={handlePageClick}
       containerClassName="flex flex-wrap items-center gap-2 justify-center"

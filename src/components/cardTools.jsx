@@ -11,8 +11,12 @@ import { addLike } from "../app/features/blogSlice";
 import { addLikeInSingleBlog } from "../app/features/singleBlogSlice";
 import { handleLike } from "../utils/functions";
 import { hoverClass } from "../utils/exports";
+import { indexPath } from "../App";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const CardTools = ({ item, singleBlog }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [liked, setLiked] = useState(false);
   const [showShareIcons, setShowShareIcons] = useState(null);
@@ -42,7 +46,10 @@ const CardTools = ({ item, singleBlog }) => {
             <li className="flex items-center justify-center gap-1.5 font-medium text-gray-800 hover:text-black duration-300 transition-colors">
               <div
                 onClick={async () => {
-                  if (loggedInUser?._id) {
+                  if (!loggedInUser) {
+                    toast.loading("Please login or register.");
+                    return navigate(`/${indexPath}/sign-in`);
+                  } else {
                     if (loggedInUser?._id === item?.author?._id) {
                       return;
                     } else {

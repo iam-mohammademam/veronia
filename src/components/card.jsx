@@ -52,13 +52,13 @@ const Card = ({ column, item, options }) => {
         <div
           className={`${
             column && "max-[767px]:w-full"
-          } shrink-0 w-1/3 max-[500px]:w-full min-[499px]:max-h-[170px] overflow-hidden cursor-pointer`}
+          } shrink-0 w-1/3 max-[500px]:w-full max-h-[180px] overflow-hidden cursor-pointer rounded-md`}
         >
           <img
             onClick={handleNavigation}
             src={item?.thumbnail}
             alt=""
-            className="h-full"
+            className="w-full h-full object-cover object-center"
           />
         </div>
         {/* 3 dots */}

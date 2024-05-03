@@ -1,24 +1,25 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState } from "react";
-import { format } from "timeago.js";
-import { noProfile } from "../../utils/exports";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllComments } from "../../app/features/actions";
-import { IoMdPaperPlane } from "react-icons/io";
 import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { GoTrash } from "react-icons/go";
-import { FiEdit } from "react-icons/fi";
-import {
-  handleDeleteComment,
-  handlePostComment,
-  handleUpdateComment,
-} from "../../utils/functions";
 import {
   deleteComment,
   pushComment,
   updateComment,
 } from "../../app/features/commentSlice";
+import {
+  handleDeleteComment,
+  handlePostComment,
+  handleUpdateComment,
+} from "../../utils/functions";
+import { useDispatch, useSelector } from "react-redux";
+/* eslint-disable react-hooks/exhaustive-deps */
+import { useEffect, useState } from "react";
+
+import { FiEdit } from "react-icons/fi";
+import { GoTrash } from "react-icons/go";
+import { IoMdPaperPlane } from "react-icons/io";
+import { format } from "timeago.js";
+import { getAllComments } from "../../app/features/actions";
 import { getItemWithKey } from "../../utils/storedItems";
+import { noProfile } from "../../utils/exports";
 import toast from "react-hot-toast";
 
 /* eslint-disable react/prop-types */
@@ -34,7 +35,6 @@ const Comments = ({ blogId }) => {
     }
     dispatch(getAllComments(`/comments/${blogId}`));
   }, [blogId]);
-  const randomNumber = Math.ceil(Math.random() * 99);
 
   const { data } = useSelector((state) => state.comments);
   let user = getItemWithKey("user");
@@ -51,19 +51,22 @@ const Comments = ({ blogId }) => {
       if (!user?._id) {
         return toast.error("You have to login first!");
       } else {
-        dispatch(
-          pushComment({
-            id: randomNumber,
-            title: comment,
-            author: {
-              fullName: user?.fullName,
-              _id: user?._id,
-              avatar: user?.avatar,
-            },
-          })
-        );
-        await handlePostComment(blogId, comment);
-        setComment("");
+        const { result } = await handlePostComment(blogId, comment);
+
+        if (result) {
+          dispatch(
+            pushComment({
+              id: result?._id,
+              title: comment,
+              author: {
+                fullName: user?.fullName,
+                _id: user?._id,
+                avatar: user?.avatar,
+              },
+            })
+          );
+          setComment("");
+        }
       }
     }
   };

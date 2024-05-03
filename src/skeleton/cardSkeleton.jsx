@@ -33,7 +33,7 @@ const CardSkeleton = ({ reverse }) => {
               <Skeleton width={22} height={22} circle={true} />
             </div>
             <div className="flex items-center gap-x-3">
-              <Skeleton width={22} height={22} circle={true} />
+              {/* <Skeleton width={22} height={22} circle={true} /> */}
               <Skeleton width={22} height={22} circle={true} />
             </div>
           </div>

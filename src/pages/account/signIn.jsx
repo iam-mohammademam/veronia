@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { indexPath } from "../../App";
+
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import image from "../../assets/background.jpg";
+import PasswordField from "./passwordField";
+import SubmitButton from "../../components/submitButton";
 import axios from "axios";
 import { baseurl } from "../../utils/exports";
-import toast from "react-hot-toast";
+import image from "../../assets/background.jpg";
+import { indexPath } from "../../App";
 import { storeItemWithKey } from "../../utils/storedItems";
-import SubmitButton from "../../components/submitButton";
-import PasswordField from "./passwordField";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
   const obj = {
@@ -30,7 +31,11 @@ const SignIn = () => {
         `${baseurl}/user/verification-email/${resendEmailId}`
       );
       setResendEmailId(null);
-      return toast.success(res?.data?.message);
+      toast.success(res?.data?.message);
+      setTimeout(() => {
+        navigate(`/${indexPath}`);
+        return location.reload();
+      }, 600);
     } catch (error) {
       return toast.error(error?.response?.data?.message);
     }
