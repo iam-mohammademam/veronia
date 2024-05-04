@@ -11,7 +11,7 @@ const Pagination = ({ totalPages, setCurrPage }) => {
   return (
     <ReactPaginate
       breakLabel="..."
-      pageCount={totalPages ? totalPages : 3}
+      pageCount={totalPages ? totalPages : 0}
       pageRangeDisplayed={3}
       onPageChange={handlePageClick}
       containerClassName="flex flex-wrap items-center gap-2 justify-center"

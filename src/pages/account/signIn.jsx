@@ -24,28 +24,26 @@ const SignIn = () => {
   useEffect(() => {
     document.title = `${indexPath?.toUpperCase()} - Sign in`;
   }, []);
-
-  const handleSendEmail = async () => {
-    try {
-      const res = await axios.get(
-        `${baseurl}/user/verification-email/${resendEmailId}`
-      );
-      setResendEmailId(null);
-      toast.success(res?.data?.message);
-      setTimeout(() => {
-        navigate(`/${indexPath}`);
-        return location.reload();
-      }, 600);
-    } catch (error) {
-      return toast.error(error?.response?.data?.message);
-    }
-  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInitialState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
+  };
+  const handleSendEmail = async () => {
+    if (!resendEmailId) {
+      return;
+    }
+    try {
+      const res = await axios.get(`${baseurl}/user/send-email`, {
+        headers: { id: resendEmailId },
+      });
+      setResendEmailId(null);
+      return toast.success(res?.data?.message);
+    } catch (error) {
+      return toast.error(error?.response?.data?.message);
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,13 +52,13 @@ const SignIn = () => {
       const res = await axios.post(`${baseurl}/user/login`, initialState);
       storeItemWithKey("user", res?.data?.result);
       storeItemWithKey("token", res?.data?.token);
+      toast.success(res?.data?.message);
       setInitialState(obj);
       setTimeout(() => {
         navigate(`/${indexPath}`);
-      }, 1000);
-      return toast.success(res?.data?.message);
+        return location.reload();
+      }, 600);
     } catch (error) {
-      console.log(error);
       if (error?.response?.status == 403) {
         setResendEmailId(error?.response?.data?.id);
       }
@@ -91,7 +89,7 @@ const SignIn = () => {
                 name="email"
                 required
                 onChange={handleChange}
-                value={initialState.email}
+                value={initialState?.email}
                 className="py-1 w-full outline-0 bg-transparent placeholder-slate-100"
                 placeholder="Email address"
               />
@@ -100,8 +98,7 @@ const SignIn = () => {
           <div className="mt-3">
             <PasswordField
               loading={loading}
-              setInitialState={setInitialState}
-              initialState={initialState}
+              password={initialState?.password}
               handleChange={handleChange}
             />
           </div>

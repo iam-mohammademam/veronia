@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { indexPath } from "../../App";
+
 import { AiOutlineUser } from "react-icons/ai";
 import { MdOutlineAlternateEmail } from "react-icons/md";
-import image from "../../assets/background.jpg";
+import PasswordField from "./passwordField";
+import SubmitButton from "../../components/submitButton";
 import axios from "axios";
 import { baseurl } from "../../utils/exports";
+import image from "../../assets/background.jpg";
+import { indexPath } from "../../App";
 import toast from "react-hot-toast";
-import SubmitButton from "../../components/submitButton";
-import PasswordField from "./passwordField";
+import { useNavigate } from "react-router-dom";
 
 const SignUP = () => {
   const obj = {
@@ -93,8 +94,7 @@ const SignUP = () => {
           <div className="mt-3">
             <PasswordField
               loading={loading}
-              setInitialState={setInitialState}
-              initialState={initialState}
+              password={initialState?.password}
               handleChange={handleChange}
             />
           </div>

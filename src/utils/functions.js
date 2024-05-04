@@ -2,7 +2,6 @@ import { getItemWithKey, removeItemWithKey } from "./storedItems";
 
 import axios from "axios";
 import { baseurl } from "./exports";
-import { indexPath } from "../App";
 import { putRequest } from "../app/requests/putRequest";
 import toast from "react-hot-toast";
 
@@ -13,15 +12,13 @@ export const handleLike = async (blogId) => {
     return toast.error("You have to login first!");
   }
   try {
-    const res = await putRequest(`/like/${blogId}`);
-    console.log(res);
+    await putRequest(`/like/${blogId}`);
+
     return { success: true };
   } catch (error) {
-    console.error(error);
     return error?.response?.data?.message;
   }
 };
-
 export const handlePostComment = async (blogId, value) => {
   try {
     const res = await axios.post(
@@ -32,7 +29,6 @@ export const handlePostComment = async (blogId, value) => {
 
     return { result: res.data.result };
   } catch (error) {
-    console.error(error);
     return error?.response?.data?.message;
   }
 };
@@ -41,10 +37,9 @@ export const handleUpdateComment = async (commentId, value) => {
     return;
   }
   try {
-    await putRequest(`/comment/${commentId}`, { title: value });
-    return { success: true };
+    const res = await putRequest(`/comment/${commentId}`, { title: value });
+    return { result: res.data.result };
   } catch (error) {
-    console.error(error);
     return error?.response?.data?.message;
   }
 };
@@ -58,15 +53,8 @@ export const handleDeleteComment = async (commentId, blogId) => {
     });
     return { success: true };
   } catch (error) {
-    console.error(error);
     return error?.response?.data?.message;
   }
-};
-export const handleLogout = () => {
-  removeItemWithKey("user");
-  removeItemWithKey("token");
-  window.open(`/${indexPath}`);
-  location.reload();
 };
 export const handleDeleteBlog = async (blogId) => {
   if (!blogId) {
@@ -83,104 +71,7 @@ export const handleDeleteBlog = async (blogId) => {
     );
   }
 };
-export const createChat = async (id) => {
-  if (!id) {
-    return;
-  }
-  try {
-    const res = await axios.post(
-      `${baseurl}/chat/create`,
-      { user_2: id },
-      {
-        headers: {
-          authorization: token,
-        },
-      }
-    );
-    // console.log(res);
-    return { id: res?.data?.id };
-  } catch (error) {
-    console.error(error);
-    return error?.response?.data?.message;
-  }
-};
-export const handleDelChat = async (id) => {
-  if (!id) {
-    return;
-  }
-  try {
-    await axios.delete(`${baseurl}/chat/delete`, {
-      headers: {
-        authorization: token,
-        id,
-      },
-    });
-    return { success: true };
-  } catch (error) {
-    console.error(error);
-    return error?.response?.data?.message;
-  }
-};
-
-export const createMessage = async ({ chatId, message }) => {
-  if (!message || !chatId) {
-    return;
-  }
-  try {
-    const res = await axios.post(
-      `${baseurl}/message/create`,
-      { message },
-      {
-        headers: {
-          authorization: token,
-          id: chatId,
-        },
-      }
-    );
-    return res?.data?.result;
-  } catch (error) {
-    console.log(error);
-    return error?.response;
-  }
-};
-export const handleDeleteMessage = async (messageId) => {
-  if (!messageId) {
-    return;
-  }
-  try {
-    const res = await axios.delete(
-      `${baseurl}/message/delete`,
-
-      {
-        headers: {
-          authorization: token,
-          id: messageId,
-        },
-      }
-    );
-    return res?.data?.result;
-  } catch (error) {
-    return error?.response;
-  }
-};
-export const handleUpdateMessage = async (messageId, message) => {
-  if (!messageId || !message) {
-    return;
-  }
-  try {
-    const res = await axios.put(
-      `${baseurl}/message/update`,
-      { message },
-      {
-        headers: {
-          authorization: token,
-          id: messageId,
-        },
-      }
-    );
-
-    return res?.data?.result;
-  } catch (error) {
-    return error?.response;
-  }
+export const handleLogout = () => {
+  removeItemWithKey("user");
+  removeItemWithKey("token");
 };

@@ -19,11 +19,14 @@ import { IoMdPaperPlane } from "react-icons/io";
 import { format } from "timeago.js";
 import { getAllComments } from "../../app/features/actions";
 import { getItemWithKey } from "../../utils/storedItems";
+import { indexPath } from "../../App";
 import { noProfile } from "../../utils/exports";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 /* eslint-disable react/prop-types */
 const Comments = ({ blogId }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const [updateCommentId, setUpdateCommentId] = useState(false);
   const [comment, setComment] = useState("");
@@ -41,7 +44,11 @@ const Comments = ({ blogId }) => {
 
   const handleSubmit = async () => {
     if (!user?._id) {
-      return toast.error("You have to login first!");
+      navigate(`/${indexPath}`);
+      return toast.error("Please login or register.");
+    }
+    if (!comment) {
+      return;
     }
     if (updateCommentId) {
       dispatch(updateComment({ id: updateCommentId, title: comment }));
@@ -113,7 +120,7 @@ const Comments = ({ blogId }) => {
             return (
               <li key={index} className="flex gap-x-2 pt-2 w-fit">
                 <div className="flex gap-2">
-                  <div className="w-8 h-8 shrink-0 rounded-full mt-1 overflow-hidden cursor-pointer">
+                  <div className="w-8 h-8 shrink-0 bg-black rounded-full overflow-hidden cursor-pointer">
                     <img
                       src={item?.author?.avatar || noProfile}
                       alt="avatar"

@@ -11,7 +11,7 @@ import myBlogsSlice from "./features/myBlogsSlice";
 import othersSlice from "./features/othersSlice";
 import singleBlogSlice from "./features/singleBlogSlice";
 
-export const store = configureStore({
+const store = configureStore({
   reducer: {
     blogs: blogSlice,
     singleBlog: singleBlogSlice,
@@ -23,3 +23,5 @@ export const store = configureStore({
     others: othersSlice,
   },
 });
+
+export default store;

@@ -8,7 +8,7 @@ const CardAuthor = ({ item, reverse }) => {
     <>
       {reverse ? (
         <div className="flex items-center gap-1.5">
-          <div className="w-6 h-6 rounded-full overflow-hidden cursor-pointer">
+          <div className="w-6 h-6 rounded-full bg-black overflow-hidden cursor-pointer">
             <img
               src={item?.author?.avatar || avatar}
               alt=""
@@ -27,7 +27,7 @@ const CardAuthor = ({ item, reverse }) => {
         <div className="flex items-center justify-between gap-2 w-full overflow-hidden">
           {/* profile */}
           <div className="flex items-center gap-2 w-fit">
-            <div className="w-9 h-9 cursor-pointer rounded-full overflow-hidden">
+            <div className="w-9 h-9 bg-black cursor-pointer rounded-full overflow-hidden">
               <img
                 src={item?.author?.avatar || avatar}
                 alt=""

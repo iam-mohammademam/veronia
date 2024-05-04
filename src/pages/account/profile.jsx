@@ -1,45 +1,50 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import { getItemWithKey, storeItemWithKey } from "../../utils/storedItems";
-import { baseurl } from "../../utils/exports";
-import axios from "axios";
-import SubmitButton from "../../components/submitButton";
-import PasswordField from "./passwordField";
+import { setActiveMenu, setInitialState } from "../../app/features/othersSlice";
+import { useDispatch, useSelector } from "react-redux";
+
 import { LiaTimesSolid } from "react-icons/lia";
+import { LuPen } from "react-icons/lu";
+import PasswordField from "./passwordField";
+import SubmitButton from "../../components/submitButton";
+import axios from "axios";
+import { baseurl } from "../../utils/exports";
 import toast from "react-hot-toast";
+import { useState } from "react";
 
 const Profile = () => {
-  const user = getItemWithKey("user");
-  const obj = {
-    fullName: user?.fullName,
-    email: user?.email,
-    username: user?.username,
-    password: "",
-  };
-  const [initialState, setInitialState] = useState(obj);
-  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
+  const { initialState } = useSelector((state) => state.others);
   const token = getItemWithKey("token");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setInitialState({ ...initialState, [name]: value });
+    dispatch(setInitialState({ key: name, value }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("avatar", initialState.avatar);
+    formData.append("username", initialState.username);
+    formData.append("fullName", initialState.fullName);
+    formData.append("email", initialState.email);
+    formData.append("password", initialState.password);
     setLoading(true);
     try {
-      const res = await axios.put(`${baseurl}/user/update`, initialState, {
+      const res = await axios.put(`${baseurl}/user/update`, formData, {
         headers: { authorization: token },
       });
+
+      toast.success(res?.data?.message);
       storeItemWithKey("user", res?.data?.result);
-      setInitialState(obj);
       setTimeout(() => {
-        location.reload();
-      }, 1000);
-      return toast.success(res?.data?.message);
+        dispatch(setInitialState(null));
+        return location.reload();
+      }, 700);
     } catch (error) {
-      console.error(error);
       return toast.error(error?.response?.data?.message);
     } finally {
       setLoading(false);
@@ -50,25 +55,45 @@ const Profile = () => {
   return (
     <>
       <div className="flex flex-col items-center justify-center w-full h-full relative">
-        <div className="w-24 h-24 rounded-full overflow-hidden">
-          <img src={user?.avatar} alt="" className="h-full" />
+        <div className="relative">
+          <div className="w-24 h-24 rounded-full overflow-hidden bg-black">
+            <img
+              src={
+                initialState?.avatar?.name
+                  ? URL.createObjectURL(initialState?.avatar)
+                  : initialState?.avatar
+              }
+              alt="avatar"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
+
+          <div
+            onClick={() => {
+              dispatch(setActiveMenu("avatars"));
+            }}
+            className="absolute bottom-0 right-0"
+          >
+            <LuPen />
+          </div>
         </div>
+
         <div className="mt-4 flex flex-col items-center w-auto">
           <input
             type="text"
             name="username"
-            value={initialState.username}
+            value={initialState?.username}
             onChange={handleChange}
             className="w-fit border py-1.5 rounded-sm outline-none text-center text-sm px-2 font-medium bg-transparent"
           />
           <input
             type="text"
             name="fullName"
-            value={initialState.fullName}
+            value={initialState?.fullName}
             onChange={handleChange}
             className="w-fit border py-1.5 rounded-sm outline-none text-center px-2 bg-transparent font-medium"
           />
-          <span className="font-medium">{initialState.email}</span>
+          <span className="font-medium">{initialState?.email}</span>
           <div onClick={() => setShowModal(true)} className="w-full">
             <SubmitButton text={"Save changes"} color={"black"} />
           </div>
@@ -98,7 +123,7 @@ const Profile = () => {
           </h1>
           <form onSubmit={handleSubmit}>
             <PasswordField
-              initialState={initialState}
+              password={initialState?.password}
               handleChange={handleChange}
               color={"black"}
             />

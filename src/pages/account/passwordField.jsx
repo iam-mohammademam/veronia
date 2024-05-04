@@ -1,9 +1,10 @@
+import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
+
+import { FiLock } from "react-icons/fi";
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { FiLock } from "react-icons/fi";
 
-const PasswordField = ({ initialState, handleChange, color }) => {
+const PasswordField = ({ handleChange, color, password }) => {
   const [showPassword, setShowPassword] = useState(false);
   return (
     <>
@@ -21,16 +22,14 @@ const PasswordField = ({ initialState, handleChange, color }) => {
           name="password"
           required
           onChange={handleChange}
-          value={initialState.password}
+          value={password}
           className="py-1 w-full outline-0 bg-transparent placeholder-slate-100"
           placeholder="Password"
         />
 
         <div
           onClick={() => setShowPassword((prevState) => !prevState)}
-          className={`${
-            initialState.password ? "opacity-100" : "opacity-0"
-          } cursor-pointer`}
+          className={`${password ? "opacity-100" : "opacity-0"} cursor-pointer`}
         >
           {showPassword ? (
             <AiOutlineEye className="text-xl" />

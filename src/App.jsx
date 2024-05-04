@@ -16,7 +16,7 @@ import SignIn from "./pages/account/signIn";
 import SignUP from "./pages/account/signUP";
 import { SkeletonTheme } from "react-loading-skeleton";
 import { Toaster } from "react-hot-toast";
-import VerifyEmail from "./pages/account/verifyEmail";
+import VerifyEmail from "./components/verifyEmail";
 import { addLoggedInUser } from "./app/features/othersSlice";
 import { getItemWithKey } from "./utils/storedItems";
 import { useDispatch } from "react-redux";
@@ -51,6 +51,10 @@ const App = () => {
           <Route path={`/${indexPath}/sign-in`} element={<SignIn />} />
           <Route path={`/${indexPath}/sign-up`} element={<SignUP />} />
           <Route path={`/${indexPath}/profile`} element={<Account />} />
+          <Route
+            path={`/${indexPath}/verification`}
+            element={<VerifyEmail />}
+          />
           <Route path={`*`} element={<NoPageFound page={true} />} />
         </Routes>
 

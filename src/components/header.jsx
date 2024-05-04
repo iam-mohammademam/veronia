@@ -36,7 +36,10 @@ const Header = () => {
               <LuPencilLine className="text-lg" /> write
             </button>
             <button
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+                location.reload();
+              }}
               className="bg-gray-200/30 hidden items-center gap-1.5 font-medium rounded-3xl px-4 py-1 hover:bg-gray-200/10 transition-colors duration-200 md:flex"
             >
               <IoExitOutline className="text-lg" /> Logout

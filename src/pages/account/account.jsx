@@ -1,8 +1,7 @@
-/* eslint-disable react/prop-types */
-
 import Navigation from "./navigation";
 import Posts from "./blogs";
 import Profile from "./profile";
+import SelectAvatar from "./selectAvatar";
 import { useSelector } from "react-redux";
 
 const Account = () => {
@@ -16,6 +15,8 @@ const Account = () => {
       <div className="w-full">
         {activeMenu === "profile" ? (
           <Profile />
+        ) : activeMenu === "avatars" ? (
+          <SelectAvatar />
         ) : activeMenu === "blogs" ? (
           <Posts />
         ) : (
