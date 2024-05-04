@@ -31,8 +31,16 @@ export const profileMenu = [
         name: "terms of use",
       },
       { icon: <GiNetworkBars className="text-xl" />, name: "data safety" },
-      { icon: <IoExitOutline className="text-xl" />, name: "logout" },
-      { icon: <LuUserX className="text-xl" />, name: "delete your account" },
+      {
+        icon: <IoExitOutline className="text-xl" />,
+        name: "logout",
+        path: "logout",
+      },
+      {
+        icon: <LuUserX className="text-xl" />,
+        name: "delete account",
+        path: "delete-account",
+      },
     ],
   },
   {

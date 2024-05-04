@@ -63,6 +63,9 @@ const PostBlog = () => {
         formData.append("tags", tag);
       });
     }
+    if (!initialState.tags) {
+      return toast.error("Tags is required.");
+    }
     setLoading(true);
     try {
       const res = await axios.post(`${baseurl}/blogs`, formData, {

@@ -61,9 +61,13 @@ const Navigation = ({ mobile }) => {
                       key={index}
                       onClick={() => {
                         if (item.name === "logout") {
+                          navigate(`/${indexPath}`);
                           handleLogout();
+                          location.reload();
                         }
-                        handleClick(item.path);
+                        if (item.path === "delete-account") {
+                          navigate(`/${indexPath}/delete-account`);
+                        }
                       }}
                       className="w-full cursor-pointer py-2.5 px-2 text-lg tracking-wide hover:bg-slate-100/10 sm:hover:bg-slate-200/90 transition-all duration-300 capitalize backdrop-blur-sm rounded-sm border- border-white/10 flex items-center gap-1.5"
                     >

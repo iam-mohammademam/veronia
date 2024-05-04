@@ -55,7 +55,7 @@ const SignUP = () => {
         alt=""
         className="object-cover object-center lg:h-auto h-full"
       />
-      <div className="flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 md:w-fit  shrink-0 max-[400px]:w-[90%] bg-transparent py-5 px-7 rounded-md backdrop-blur-[3px] shadow-md shadow-white/20 border border-white/20 text-white z-20">
+      <div className="flex items-center justify-center flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 sm:w-fit shrink-0 w-[90%] bg-transparent py-5 px-7 rounded-md backdrop-blur-[3px] shadow-md shadow-white/20 border border-white/20 text-white z-20">
         <h1 className="text-xl font-medium mb-3 montserrat">Join us</h1>
         <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div>

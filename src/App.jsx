@@ -5,6 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import Account from "./pages/account/account";
+import Consent from "./components/consent";
 import Details from "./pages/details/details";
 import Filter from "./pages/filter/filter";
 import Header from "./components/header";
@@ -51,6 +52,7 @@ const App = () => {
           <Route path={`/${indexPath}/sign-in`} element={<SignIn />} />
           <Route path={`/${indexPath}/sign-up`} element={<SignUP />} />
           <Route path={`/${indexPath}/profile`} element={<Account />} />
+          <Route path={`/${indexPath}/delete-account`} element={<Consent />} />
           <Route
             path={`/${indexPath}/verification`}
             element={<VerifyEmail />}
