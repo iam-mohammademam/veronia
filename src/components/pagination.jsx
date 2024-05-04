@@ -7,31 +7,32 @@ const Pagination = ({ totalPages, setCurrPage }) => {
   const handlePageClick = ({ selected }) => {
     setCurrPage(selected + 1);
   };
-
+  const commonClass =
+    "h-9 w-9 flex items-center justify-center duration-300 transition-all";
   return (
     <ReactPaginate
       breakLabel="..."
       pageCount={totalPages ? totalPages : 0}
       pageRangeDisplayed={3}
       onPageChange={handlePageClick}
-      containerClassName="flex flex-wrap items-center gap-2 justify-center"
-      pageClassName="p-1 h-9 w-9 bg-gray-100 flex items-center justify-center"
-      pageLinkClassName="text-sm text-black text-center"
-      previousClassName="h-9 w-9 rounded-full flex items-center justify-center"
-      nextClassName="h-9 w-9 rounded-full flex items-center justify-center"
+      containerClassName="flex flex-wrap items-center gap-2 justify-center pagination"
+      pageClassName=""
+      pageLinkClassName={`text-black bg-gray-100 hover:bg-black hover:text-white ${commonClass}`}
+      previousClassName={commonClass}
       previousLinkClassName="text-black"
+      nextClassName={commonClass}
       nextLinkClassName="text-black"
-      activeLinkClassName="text-black"
-      activeClassName="bg-gray-300"
+      activeLinkClassName="bg-black"
+      activeClassName="active"
       renderOnZeroPageCount={null}
       nextLabel={
-        <span className="flex items-center gap-2 text-lg">
-          <GoChevronRight className="text-black" />
+        <span className={`hover:bg-black hover:text-white ${commonClass}`}>
+          <GoChevronRight className="text-xl" />
         </span>
       }
       previousLabel={
-        <span className="flex items-center justify-center text-lg">
-          <GoChevronLeft className="text-black" />
+        <span className={`hover:bg-black hover:text-white ${commonClass}`}>
+          <GoChevronLeft className="text-xl" />
         </span>
       }
     />

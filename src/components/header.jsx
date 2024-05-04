@@ -37,6 +37,7 @@ const Header = () => {
             </button>
             <button
               onClick={() => {
+                navigate(`/${indexPath}`);
                 handleLogout();
                 location.reload();
               }}

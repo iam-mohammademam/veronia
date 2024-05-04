@@ -15,7 +15,6 @@ import { useEffect, useState } from "react";
 
 import { FiEdit } from "react-icons/fi";
 import { GoTrash } from "react-icons/go";
-import { IoMdPaperPlane } from "react-icons/io";
 import { format } from "timeago.js";
 import { getAllComments } from "../../app/features/actions";
 import { getItemWithKey } from "../../utils/storedItems";
@@ -28,9 +27,10 @@ import { useNavigate } from "react-router-dom";
 const Comments = ({ blogId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [updateCommentId, setUpdateCommentId] = useState(false);
   const [comment, setComment] = useState("");
-  const [showComments, setShowComment] = useState(false);
+  const [showComments, setShowComment] = useState(true);
 
   useEffect(() => {
     if (!blogId) {
@@ -44,7 +44,7 @@ const Comments = ({ blogId }) => {
 
   const handleSubmit = async () => {
     if (!user?._id) {
-      navigate(`/${indexPath}`);
+      navigate(`/${indexPath}/sign-in`);
       return toast.error("Please login or register.");
     }
     if (!comment) {
@@ -195,13 +195,14 @@ const Comments = ({ blogId }) => {
           }}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Type your comment here"
-          className="w-full h-full pl-3 bg-transparent"
+          className="w-full h-full pl-5 bg-transparent"
         />
         <div
           onClick={handleSubmit}
-          className="bg-gray-200 hover:bg-gray-300 duration-300 transition-colors rounded-full h-full w-9 flex items-center justify-center cursor-pointer"
+          className="pr-5 capitalize pl-3 border-l border-black/40 hover:text-slate-700 font-medium duration-300 transition-all  flex items-center justify-center cursor-pointer"
         >
-          <IoMdPaperPlane className="text-lg" />
+          send
+          {/* <IoMdPaperPlane className="text-lg" /> */}
         </div>
       </div>
     </>

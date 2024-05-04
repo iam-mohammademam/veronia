@@ -27,7 +27,7 @@ input{
 }
 
 .bg-black\!important{
-   background: #000 !important;
+   background: #302f2f !important;
 }
 .scrollbar::-webkit-scrollbar{
    width: 4px;
@@ -62,3 +62,8 @@ input{
  .description ol{
    list-style: decimal !important;
  }
+ li.active a{
+background: #302f2f !important;
+color: #fff;
+
+}

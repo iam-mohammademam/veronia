@@ -4,32 +4,38 @@ import {
   FacebookShareButton,
   TelegramIcon,
   TelegramShareButton,
-  TwitterIcon,
   TwitterShareButton,
+  XIcon,
 } from "react-share";
 
 const ShareIcons = ({ data }) => {
+  const hashtags =
+    data?.tags?.map((item) => {
+      return `#${item}`;
+    }) + "#mohammademam #blog_application";
   return (
     <ul className="flex items-center gap-3 relative">
-      <span className="share-icons absolute w-full h-full bg-transparent"></span>
+      <span className="share-icons absolute w-full h-full bg-transparent pointer-events-none"></span>
       <FacebookShareButton
         className="hover:scale-90 duration-300 transition-all cursor-pointer"
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]} #veronia`}
+        hashtag={hashtags}
       >
         <FacebookIcon size={25} round={true} />
       </FacebookShareButton>
       <TwitterShareButton
-        className="hover:scale-90 duration-300 transition-all"
+        title={data?.heading}
+        hashtag={hashtags}
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]} #veronia`}
+        className="hover:scale-90 duration-300 transition-all"
       >
-        <TwitterIcon size={25} round={true} />
+        <XIcon size={25} round={true} />
       </TwitterShareButton>
       <TelegramShareButton
+        title={data?.heading}
         className="hover:scale-90 duration-300 transition-all"
         url={data?.thumbnail}
-        hashtag={`#${data?.tags[0]} #veronia`}
+        hashtag={hashtags}
       >
         <TelegramIcon size={25} round={true} />
       </TelegramShareButton>
